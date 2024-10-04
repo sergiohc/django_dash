@@ -18,10 +18,12 @@ const config = {
   minify: minify,
   sourcemap: sourcemap,
   plugins: [copyStaticFiles()],
+  external: ['buffer', 'stream', 'assert'], // Adiciona os módulos externos aqui
+  platform: 'browser', // Certifique-se de que a plataforma é o browser
 }
 
 if (watch) {
-  let context = await esbuild.context({...config, logLevel: 'info'})
+  let context = await esbuild.context({ ...config, logLevel: 'info' })
   await context.watch()
 } else {
   esbuild.build(config)

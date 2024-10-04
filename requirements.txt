@@ -13,3 +13,9 @@ isort==5.13.2
 black==24.8.0
 
 setuptools==74.1.2
+
+django-compressor==4.5.1
+dash==2.9
+pandas
+django_plotly_dash==2.3.2
+plotly

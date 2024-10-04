@@ -1,0 +1,57 @@
+{% load compress %}
+{% load static %}
+{% load plotly_dash %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Django project using Tailwind CSS and Flowbite for responsive design.">
+
+  <title>{% block title %}My Django Project{% endblock title %}</title>
+
+  <!-- Compress CSS -->
+  {% compress css %}
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  {% endcompress %}
+
+  <!-- RealFaviconGenerator - Favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}">
+  <link rel="manifest" href="{% static 'site.webmanifest' %}">
+  <link rel="mask-icon" href="{% static 'safari-pinned-tab.svg' %}" color="#61b9d2">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Plotly Dash Header -->
+  {% plotly_header %} <!-- Carrega o header do Dash aqui -->
+
+  <!-- Custom meta tags -->
+  {% block meta_tags %}{% endblock meta_tags %}
+</head>
+
+<body class="bg-white dark:bg-gray-900 relative antialiased">
+
+  <!-- Main Content Container -->
+  <div id="main-content" class="overflow-y-auto w-full h-full">
+    {% block content %}{% endblock content %}
+  </div>
+
+  <!-- Scripts -->
+  <!-- Compress JS -->
+  {% compress js %}
+  <script src="{% static 'js/app.js' %}"></script>
+  {% endcompress %}
+
+  {% block scripts %}{% endblock scripts %}
+
+  <!-- Plotly Dash Footer -->
+  {% plotly_footer %}
+
+</body>
+
+</html>

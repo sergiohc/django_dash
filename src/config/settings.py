@@ -25,6 +25,17 @@ DEBUG = bool(strtobool(os.getenv("DEBUG", "false")))
 
 TESTING = "test" in sys.argv
 
+ASGI_APPLICATION = 'config.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('redis', 6379)],
+        },
+    },
+}
+
 # https://docs.djangoproject.com/en/5.1/ref/settings/#std:setting-ALLOWED_HOSTS
 allowed_hosts = os.getenv("ALLOWED_HOSTS", ".localhost,127.0.0.1,[::1]")
 ALLOWED_HOSTS = list(map(str.strip, allowed_hosts.split(",")))
@@ -38,7 +49,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "channels",  # Para suporte a WebSockets com Django Channels
+    "django_plotly_dash.apps.DjangoPlotlyDashConfig",  # Para Dash/Plotly integrado com Django
+    "compressor",  # Para suporte ao django-compressor
 ]
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -49,6 +65,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'django_plotly_dash.middleware.BaseMiddleware',
 ]
 
 if not TESTING:
@@ -150,11 +167,22 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+PLOTLY_COMPONENTS = [
+    'dash_core_components',
+    'dash_html_components',
+    'dash_renderer',
+    'dpd_components'
+]
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 STATIC_URL = "/static/"
-STATICFILES_DIRS = ["/public", os.path.join(BASE_DIR, "..", "public")]
-STATIC_ROOT = "/public_collected"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "..", "public"),  # Diretório de arquivos estáticos
+    os.path.join(BASE_DIR, "..", 'node_modules/'),
+]
+STATIC_ROOT = os.path.join(BASE_DIR, "..", "public_collected")  # Diretório para coletar arquivos estáticos
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Django Debug Toolbar
